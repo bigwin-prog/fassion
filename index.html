@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-commerce Page</title>
+
+    <!-- Bootstrap CDN for layout -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome CDN for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- Custom CSS -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding-top: 70px; /* Prevents content from hiding under the navbar */
+      }
+
+      .navbar {
+        background-color: #2874f0;
+        padding: 1rem 2rem;
+      }
+
+      .search-bar {
+        width: 50%;
+        position: relative;
+        transition: width 0.3s ease; /* Smooth transition for width change */
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+      }
+
+      .search-bar button {
+        background-color: #ffeb3b;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 2px;
+        cursor: pointer;
+      }
+
+      .search-bar button:hover {
+        background-color: #f0a500;
+      }
+
+      .navbar .seller-btn,
+      .navbar .cart-btn {
+        color: white;
+        font-weight: bold;
+        margin-left: 20px;
+        cursor: pointer;
+      }
+
+      .more-dropdown .dropdown-menu {
+        background-color: #2874f0;
+      }
+
+      .more-dropdown .dropdown-menu a {
+        color: white;
+      }
+
+      .cart-btn {
+        display: flex;
+        align-items: center;
+      }
+
+      .cart-btn i {
+        margin-right: 5px;
+      }
+
+      /* Hover effect for Cart button */
+      .cart-btn:hover {
+        color: #ffeb3b;
+        background-color: #2874f0;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+
+      /* Position Cart button below search bar on smaller screens */
+      @media (max-width: 600px) {
+        .navbar {
+          flex-direction: column;
+          align-items: start;
+        }
+
+        .cart-btn {
+          margin-top: 10px;
+          margin-left: 0;
+        }
+
+        .search-bar {
+          width: 90%; /* Expand search bar */
+        }
+      }
+
+      /* Search Results */
+      .search-results {
+        position: absolute;
+        z-index: 1000;
+        background-color: white;
+        border: 1px solid #ccc;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none; /* Initially hidden */
+      }
+
+      .search-results div {
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+
+      .search-results div:hover {
+        background-color: #f0f0f0;
+      }
+
+      /* Product Listing Styles */
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+      }
+
+      .product-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .product-item {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease;
+      }
+
+      .product-item:hover {
+        transform: scale(1.02);
+      }
+
+      .product-image {
+        width: 100%;
+        height: auto;
+        max-height: 250px;
+        object-fit: cover;
+      }
+
+      .product-details {
+        padding: 15px;
+      }
+
+      .product-title {
+        font-size: 18px;
+        color: #333;
+        font-weight: bold;
+      }
+
+      .product-price {
+        font-size: 20px;
+        color: black;
+        font-weight: bold;
+      }
+
+      .product-offer {
+        color: green;
+        font-size: 16px;
+      }
+
+      .stock-alert {
+        color: violet;
+        font-size: 14px;
+        background-color: #e6e6fa;
+        padding: 5px;
+        border-radius: 3px;
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      .delivery-charge,.code {
+        color: #666;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      /* Responsive adjustments for smaller screens */
+      @media (max-width: 600px) {
+        .search-bar {
+          width: 70%; /* Default small size */
+        }
+
+        .search-bar input {
+          width: 100%; /* Fill parent */
+        }
+
+        .search-bar:focus-within {
+          width: 90%; /* Expand on focus */
+        }
+
+        .product-item {
+          flex-direction: row; /* Arrange image and details side by side */
+          align-items: center;
+        }
+
+        .product-image {
+          width: 40%;
+          max-height: 100px;
+        }
+
+        .product-details {
+          padding: 10px;
+        }
+
+        .product-title {
+          font-size: 16px;
+        }
+
+        .product-price {
+          font-size: 18px;
+        }
+
+        .product-offer {
+          font-size: 14px;
+        }
+      }
+
+      .icon-only .cart-text {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Navbar with fixed-top class to keep it visible on scroll -->
+    <nav class="navbar d-flex align-items-center justify-content-between fixed-top">
+      <!-- Search Bar -->
+      <div class="search-bar flex-grow-1" id="searchBarContainer">
+        <form class="d-flex" role="search" onsubmit="return false;">
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search for Products, Brands and More"
+            aria-label="Search"
+            onfocus="expandSearchBar()"
+            onblur="shrinkSearchBar()"
+            oninput="showResults(this.value)"
+          />
+        </form>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <!-- Cart Button with improved spacing and hover effect -->
+ 
+    </nav>
+
+    <div class="container">
+      <div class="product-list">
+        <div
+          class="product-item" 
+          onclick="redirectToPage('Realme C33 (Night Sea, 64GB)', '₹8,999', 'Image & logo/hoodies.jfif', ['Image & logo/hoodies2.jfif', 'Image & logo/hoodies2.jfif', 'Image & logo/suit2.jfif'], '10% off', 'Oct 30 - Free','#21392')">
+          <img
+            src="Image & logo/hoodies2.jfif"
+            alt="Product Image"
+            class="product-image"
+          />
+          <div class="product-details">
+            <p class="product-title">
+              Motorola G23 (Mint Green, 4GB RAM, 128GB Storage)
+            </p>
+            <p class="product-price">₹11,999</p>
+            <p class="product-offer">25% Off</p>
+            <span class="stock-alert">Only a few left in stock!</span>
+            <p class="delivery-charge">Delivery Charge: ₹49</p>
+            <p class="code">#3E10K</p> 
+          </div>
+          
+        </div>
+        <div
+  class="product-item"
+  onclick="redirectToPage('Jacket', '₹999', 'Image & logo/jacket3.jfif', ['Image & logo/jacket5.jfif', 'Image & logo/jacket6.jfif', 'Image & logo/jacket4.jfif'], '10% off', 'Oct 30 - Free','#21392')"
+>
+  <img
+    src="Image & logo/jacket3.jfif"
+    alt="Product Image"
+    class="product-image"
+  />
+  <div class="product-details">
+    <p class="product-title">Jacket</p>
+    <p class="product-price">₹999</p>
+    <p class="product-offer">25% Off</p>
+    <span class="stock-alert">Only a few left in stock!</span>
+    <p class="delivery-charge">Delivery Charge: ₹49</p>
+    <p class="code">#3E10K</p>
+  </div>
+</div>
+<div
+  class="product-item"
+  onclick="redirectToPage('Jeans', '800', 'Image & logo/jeans1.jfif', ['Image & logo/jeans2.jfif', 'Image & logo/jeans3.jfif', 'Image & logo/jeans4.jfif'], '10% off', 'Oct 30 - Free','#21392')"
+>
+  <img
+    src="Image & logo/jeans1.jfif"
+    alt="Product Image"
+    class="product-image"
+  />
+  <div class="product-details">
+    <p class="product-title">Jeans</p>
+    <p class="product-price">₹800</p>
+    <p class="product-offer">25% Off</p>
+    <span class="stock-alert">Only a few left in stock!</span>
+    <p class="delivery-charge">Delivery Charge: ₹49</p>
+    <p class="code">#3E10K</p>
+  </div>
+</div>
+<div
+  class="product-item"
+  onclick="redirectToPage('Shoes', '₹1299', 'Image & logo/shoes1.jfif', ['Image & logo/shoes2.jfif', 'Image & logo/shoes3.jfif', 'Image & logo/shoes4.jfif'], '10% off', 'Oct 30 - Free','#21392')"
+>
+  <img
+    src="Image & logo/shoes1.jfif"
+    alt="Product Image"
+    class="product-image"
+  />
+  <div class="product-details">
+    <p class="product-title">Shoes</p>
+    <p class="product-price">₹1299</p>
+    <p class="product-offer">25% Off</p>
+    <span class="stock-alert">Only a few left in stock!</span>
+    <p class="delivery-charge">Delivery Charge: ₹49</p>
+    <p class="code">#3E10K</p>
+  </div>
+</div>
+<div
+  class="product-item"
+  onclick="redirectToPage('Suit', '₹999', 'Image & logo/suit1.jfif', ['Image & logo/suit1.jfif', 'Image & logo/suit2.jfif', 'Image & logo/suit3.jfif'], '10% off', 'Oct 30 - Free','#21392')"
+>
+  <img
+    src="Image & logo/suit1.jfif"
+    alt="Product Image"
+    class="product-image"
+  />
+  <div class="product-details">
+    <p class="product-title">Suit</p>
+    <p class="product-price">₹999</p>
+    <p class="product-offer">25% Off</p>
+    <span class="stock-alert">Only a few left in stock!</span>
+    <p class="delivery-charge">Delivery Charge: ₹49</p>
+    <p class="code">#3E10K</p>
+  </div>
+</div>
+<div
+  class="product-item"
+  onclick="redirectToPage('T-Shirt', '₹299', 'Image & logo/T shirt1.jfif', ['Image & logo/T shirt2.jfif', 'Image & logo/T shirt3.jfif', 'Image & logo/T shirt4.jfif'], '10% off', 'Oct 30 - Free','#21392')"
+>
+  <img
+    src="Image & logo/T shirt1.jfif"
+    alt="Product Image"
+    class="product-image"
+  />
+  <div class="product-details">
+    <p class="product-title">T-shirt</p>
+    <p class="product-price">₹299</p>
+    <p class="product-offer">25% Off</p>
+    <span class="stock-alert">Only a few left in stock!</span>
+    <p class="delivery-charge">Delivery Charge: ₹49</p>
+    <p class="code">#3E10K</p>
+  </div>
+</div>
+<div
+  class="product-item"
+  onclick="redirectToPage('Jeans', '₹999', 'Image & logo/shoes6.jfif', ['Image & logo/shoes5.jfif', 'Image & logo/shoes2.jfif', 'Image & logo/shoes1.jfif'], '10% off', 'Oct 30 - Free','#21392')"
+>
+  <img
+    src="Image & logo/shoes5.jfif"
+    alt="Product Image"
+    class="product-image"
+  />
+  <div class="product-details">
+    <p class="product-title">Shoes</p>
+    <p class="product-price">₹999</p>
+    <p class="product-offer">25% Off</p>
+    <span class="stock-alert">Only a few left in stock!</span>
+    <p class="delivery-charge">Delivery Charge: ₹49</p>
+    <p class="code">#3E10K</p>
+  </div>
+</div>
+<div
+  class="product-item"
+  onclick="redirectToPage('Hoodie', '₹999', 'Image & logo/hoodies.jfif', ['Image & logo/hoodies2.jfif', 'Image & logo/hoodies2.jfif', 'Image & logo/suit2.jfif'], '10% off', 'Oct 30 - Free','#21392')"
+>
+  <img
+    src="Image & logo/hoodies.jfif"
+    alt="Product Image"
+    class="product-image"
+  />
+  <div class="product-details">
+    <p class="product-title">Hoodies</p>
+    <p class="product-price">₹999</p>
+    <p class="product-offer">25% Off</p>
+    <span class="stock-alert">Only a few left in stock!</span>
+    <p class="delivery-charge">Delivery Charge: ₹49</p>
+    <p class="code">#3E10K</p>
+  </div>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+        </div>
+</div>       
+    <script>
+      // Functions to expand/shrink the search bar
+      function expandSearchBar() {
+        document.querySelector(".search-bar").classList.add("expanded");
+      }
+
+      function shrinkSearchBar() {
+        document.querySelector(".search-bar").classList.remove("expanded");
+      }
+
+      // Search Results Functionality
+      function showResults(searchQuery) {
+        const searchResults = document.getElementById("searchResults");
+        if (searchQuery.length === 0) {
+          searchResults.style.display = "none";
+          return;
+        }
+
+        const results = [
+          "Men's T-Shirt",
+          "Men's Jeans",
+          "Men's Jacket",
+          "Men's Shoes",
+          "Men's Suit",
+          "Men's Shorts",
+          "Men's Hoodie",
+          "Men's Belt",
+          "Men's Socks",
+          "Men's Sunglasses",
+        ];
+
+        const filteredResults = results.filter((item) =>
+          item.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        searchResults.innerHTML = filteredResults
+          .map((result) => `<div>${result}</div>`)
+          .join("");
+
+        searchResults.style.display = "block";
+
+        // Redirect on click
+        searchResults.querySelectorAll("div").forEach((div) =>
+          div.addEventListener("click", () => {
+            window.location.href = "search-results.html?query=" + div.textContent;
+          })
+        );
+      }
+
+
+      function redirectToPage(name, price, mainImageSrc, relatedImagesSrcArray, offer, deliveryDate,code) {
+      // Save product data to session storage
+      sessionStorage.setItem('productName', name);
+      sessionStorage.setItem('productPrice', price);
+      sessionStorage.setItem('mainImage', mainImageSrc);
+      sessionStorage.setItem('relatedImages', JSON.stringify(relatedImagesSrcArray));
+      sessionStorage.setItem('offer', offer);
+      sessionStorage.setItem('deliveryDate', deliveryDate);
+      sessionStorage.setItem('code', code);
+
+      // Redirect to the product details page
+      window.location.href = 'productDetail.html';
+    }
+    </script>
+
+  </body>
+</html>

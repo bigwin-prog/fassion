@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Details Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .form-container {
+        max-width: 600px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: auto;
+        resize: both;
+        overflow: auto;
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group input[type="tel"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .form-group input[type="text"]:focus,
+      .form-group input[type="email"]:focus,
+      .form-group input[type="tel"]:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 18px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .submit-btn:hover {
+        background-color: #218838;
+      }
+
+      @media screen and (max-width: 600px) {
+        .form-container {
+          width: 100%;
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Customer Details</h2>
+      <form id="customerForm" onsubmit="sendMessage(event)">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="Enter your phone number"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email address"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="deliveryAddress">Delivery Address</label>
+          <input
+            type="text"
+            id="deliveryAddress"
+            name="deliveryAddress"
+            placeholder="Enter your delivery address"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="billingAddress">Billing Address</label>
+          <input
+            type="text"
+            id="billingAddress"
+            name="billingAddress"
+            placeholder="Enter your billing address"
+          />
+        </div>
+        <div class="form-group">
+          <label for="telegramID">Customer Telegram ID</label>
+          <input
+            type="text"
+            id="telegramID"
+            name="telegramID"
+            placeholder="Enter your Telegram ID"
+          />
+        </div>
+        <div class="form-group">
+          <label for="orderHistory">Order History</label>
+          <input
+            type="text"
+            id="orderHistory"
+            name="orderHistory"
+            placeholder="Enter order history (if any)"
+          />
+        </div>
+        <div class="form-group">
+          <label for="paymentInfo">Payment Information</label>
+          <input
+            type="text"
+            id="paymentInfo"
+            name="paymentInfo"
+            placeholder="Enter your payment information"
+            required
+          />
+        </div>
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+
+    <script>
+      // Function to send the message to Telegram
+      function sendMessage(event) {
+        event.preventDefault(); // Prevents the form from submitting
+
+        // Get the values from all input fields
+        var fullName = document.getElementById("fullName").value;
+        var phone = document.getElementById("phone").value;
+        var email = document.getElementById("email").value;
+        var deliveryAddress = document.getElementById("deliveryAddress").value;
+        var billingAddress = document.getElementById("billingAddress").value;
+        var telegramID = document.getElementById("telegramID").value;
+        var orderHistory = document.getElementById("orderHistory").value;
+        var paymentInfo = document.getElementById("paymentInfo").value;
+
+        // Construct the message to send to Telegram
+        var message = `Customer Details:\n\nFull Name: ${fullName}\nPhone: ${phone}\nEmail: ${email}\nDelivery Address: ${deliveryAddress}\nBilling Address: ${billingAddress}\nTelegram ID: ${telegramID}\nOrder History: ${orderHistory}\nPayment Information: ${paymentInfo}`;
+
+        // Replace with your chat ID or group/channel ID
+        var chatId = "5786268361"; // Use your numeric chat ID (not the username)
+
+        // Replace with your Telegram bot token
+        var botToken = "7741281791:AAEDO6kZ74HWd9fqubMe4i8PD2kzCjcggyc";
+
+        // Construct the Telegram API URL with the bot token, chat ID, and the message
+        var url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(
+          message
+        )}`;
+
+        // Send a request to the Telegram API
+        fetch(url)
+          .then((response) => response.json()) // Parse the response as JSON
+          .then((data) => {
+            // If the message is sent successfully, show an alert
+            if (data.ok) {
+              alert("Message sent successfully!");
+              document.getElementById("customerForm").reset(); // Clear the form
+            } else {
+              // If there's an error, show an error message
+              alert("Error sending message: " + data.description);
+            }
+          })
+          .catch((error) => {
+            // Handle any errors that occur during the request
+            console.error("Error:", error);
+            alert("Failed to send message.");
+          });
+      }
+    </script>
+  </body>
+</html>

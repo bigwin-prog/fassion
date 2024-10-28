@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .search-bar-container {
+        position: relative;
+        width: 50%;
+        transition: width 0.3s ease;
+      }
+
+      .search-bar-container input {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+      }
+
+      .search-results {
+        position: absolute;
+        z-index: 1000;
+        background-color: white;
+        border: 1px solid #ccc;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none; /* Initially hidden */
+      }
+
+      .search-results div {
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+
+      .search-results div:hover {
+        background-color: #f0f0f0;
+      }
+    </style>
+    <div class="search-bar-container">
+      <form class="d-flex" role="search" onsubmit="return false;">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search for Products, Brands and More"
+          aria-label="Search"
+          onfocus="expandSearchBar()"
+          onblur="shrinkSearchBar()"
+          oninput="showResults(this.value)"
+        />
+      </form>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <script>
+      function expandSearchBar() {
+        document.querySelector(".search-bar-container").style.width = "60%";
+      }
+
+      function shrinkSearchBar() {
+        document.querySelector(".search-bar-container").style.width = "50%";
+      }
+
+      function showResults(searchQuery) {
+        const searchResults = document.getElementById("searchResults");
+        if (searchQuery.length === 0) {
+          searchResults.style.display = "none";
+          return;
+        }
+
+        const results = [
+          "Men's T-Shirt",
+          "Men's Jeans",
+          "Men's Jacket",
+          "Men's Shoes",
+          "Men's Suit",
+          "Men's Shorts",
+          "Men's Hoodie",
+          "Men's Belt",
+          "Men's Socks",
+          "Men's Sunglasses",
+        ];
+
+        const filteredResults = results.filter((item) =>
+          item.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        searchResults.innerHTML = filteredResults
+          .map((result) => `<div>${result}</div>`)
+          .join("");
+
+        searchResults.style.display = "block";
+
+        searchResults.querySelectorAll("div").forEach((div) =>
+          div.addEventListener("click", () => {
+            window.location.href =
+              "search-results.html?query=" + div.textContent;
+          })
+        );
+      }
+    </script>
+  </body>
+</html>
