@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMy6ErZ5X20qfxa8G8cy8tdYz8y3w3p3vzjH+H6k" crossorigin="anonymous">
+    <style>
+        /* Basic Styling */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .payment-container { width: 90%; max-width: 500px; background-color: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+
+        /* Header Styling */
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .back-arrow { font-size: 18px; color: #000; text-decoration: none; }
+        .secure { color: #5ba85b; font-size: 12px; }
+
+        /* Amount and Offer Styling */
+        .amount { display: flex; justify-content: space-between; background-color: #e7f0ff; padding: 16px; border-radius: 6px; font-weight: bold; font-size: 1.2em; }
+        .amount-value { color: #2974f0; }
+        .offer { background-color: #e7f8e7; padding: 16px; border-radius: 6px; margin-top: 20px; color: #34a853; font-weight: bold; font-size: 1.1em; }
+
+        /* UPI Dropdown Styling */
+        .payment-method { border-top: 1px solid #ddd; padding: 16px 0; cursor: pointer; transition: background-color 0.3s; }
+        .method-header { display: flex; align-items: center; justify-content: space-between; }
+        .method-icon { margin-right: 12px; color: #2974f0; font-size: 1.3em; }
+        .method-options { display: none; padding: 12px 0; padding-left: 36px; font-size: 1.1em; }
+        .method-options label { display: flex; align-items: center; margin: 16px 0; cursor: pointer; font-size: 1.1em; }
+        .method-options i { margin-right: 10px; font-size: 1.4em; color: #2974f0; }
+        .ok-button { display: block; margin: 20px auto 0; padding: 12px 24px; background-color: #2974f0; color: #fff; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; transition: background-color 0.3s; }
+        .ok-button:hover { background-color: #1c5bb8; }
+
+        /* Error Message */
+        .error-message { color: red; font-size: 0.9em; text-align: center; margin-top: 12px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <header>
+            <a href="#" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
+            <h2>Payments</h2>
+            <span class="secure">100% Secure</span>
+        </header>
+
+        <div class="amount">
+            <span>Total Amount</span>
+            <span class="amount-value">₹271</span>
+        </div>
+
+        <div class="offer">
+            <span>₹15 Off</span>
+            <p>Claim now with payment offers</p>
+        </div>
+
+        <!-- UPI Payment Options -->
+        <div class="payment-method" onclick="toggleUPIOptions()">
+            <div class="method-header">
+                <div>
+                    <i class="fas fa-university method-icon"></i>
+                    <span>UPI</span>
+                </div>
+                <i class="fas fa-chevron-down" id="upi-arrow"></i>
+            </div>
+            <div id="upi-options" class="method-options">
+                <label><input type="radio" name="upi" value="gpay"><i class="fab fa-google-pay"></i> Google Pay</label>
+                <label><input type="radio" name="upi" value="phonepe"><i class="fab fa-paypal"></i> PhonePe</label>
+                <label><input type="radio" name="upi" value="newupi"><i class="fas fa-plus-circle"></i> Add new UPI ID</label>
+                <button class="ok-button" onclick="handleOkButton()">OK</button>
+                <div class="error-message" id="error-message">Please choose a UPI option</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleUPIOptions() {
+            const upiOptions = document.getElementById("upi-options");
+            const arrow = document.getElementById("upi-arrow");
+            upiOptions.style.display = upiOptions.style.display === "block" ? "none" : "block";
+            arrow.classList.toggle("fa-chevron-up");
+            arrow.classList.toggle("fa-chevron-down");
+        }
+
+        function handleOkButton() {
+            const selectedOption = document.querySelector('input[name="upi"]:checked');
+            const errorMessage = document.getElementById("error-message");
+
+            if (!selectedOption) {
+                // Show error if no option is selected
+                errorMessage.style.display = "block";
+            } else {
+                // Hide error if option is selected
+                errorMessage.style.display = "none";
+                const value = selectedOption.value;
+
+                // Open the relevant app based on the selection
+                if (value === "gpay") {
+                    window.location.href = "intent://pay#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end";
+                } else if (value === "phonepe") {
+                    window.location.href = "intent://pay#Intent;scheme=upi;package=com.phonepe.app;end";
+                } else if (value === "newupi") {
+                    alert("Please enter your UPI ID in the next screen");
+                    // Logic for adding a new UPI ID can go here
+                }
+            }
+        }
+    </script>
+</body>
+</html>
