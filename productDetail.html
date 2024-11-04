@@ -24,12 +24,44 @@
 
   /* Navbar styling */
   .navbar {
-    background-color: #2874f0;
+    background-color: #212529;
     padding: 1rem 2rem;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
+  }
+  /* Search results container styling */
+  .search-results {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 10;
+  }
+
+  /* Individual search result item styling */
+  .search-results div {
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+  }
+
+  .search-results div:last-child {
+    border-bottom: none;
+  }
+
+  /* Hover effect for search result items */
+  .search-results div:hover {
+    background-color: #f0f0f0;
   }
 
   /* Navbar search bar with flexible size */
@@ -198,6 +230,15 @@
       padding: 4px 8px;
     }
   }
+
+  /* Additional styles for the active size option */
+  .size-option.active {
+    background-color: #ff6600; /* Change this color as desired */
+    color: white; /* Change text color for contrast */
+    border: 1px solid #ccc; /* Optional: to match the design */
+  }
+
+
 </style>
 
     </style>
@@ -240,17 +281,19 @@
       <div class="code">
         Available Size
       </div>
-      <div style="margin-bottom: 100px" class="sizes" >
-        <div class="size-option">S</div>
-        <div class="size-option">M</div>
-        <div class="size-option">L</div>
-        <div class="size-option">XL</div>
-        <div class="size-option">XXL</div>
-        <div class="size-option">XXXL</div>
+
+
+      <div style="margin-bottom: 100px" class="sizes">
+        <div class="size-option"  onclick="selectSize('S')">S</div>
+        <div class="size-option" onclick="selectSize('M')">M</div>
+        <div class="size-option" onclick="selectSize('L')">L</div>
+        <div class="size-option" onclick="selectSize('XL')">XL</div>
+        <div class="size-option" onclick="selectSize('XXL')">XXL</div>
+        <div class="size-option" onclick="selectSize('XXXL')">XXXL</div>
       </div>
     </div>
 
-    <div class="buy-button"  onclick="window.location.href='cart-page.html'">BUY</div>
+    <div class="buy-button" onclick="redirectToOrderDetails()">BUY</div>
 
     <script>
       // Load main product details from session storage
@@ -335,6 +378,35 @@
           })
         );
       }
+   
+
+      function selectSize(size) {
+  // Store the selected size in sessionStorage
+  sessionStorage.setItem("selectedSize", size);
+
+  // Remove 'active' class from all size options
+  const sizeOptions = document.querySelectorAll('.size-option');
+  sizeOptions.forEach(option => {
+    option.classList.remove('active');
+  });
+
+  // Add 'active' class to the currently selected size option
+  const selectedOption = Array.from(sizeOptions).find(option => option.textContent === size);
+  if (selectedOption) {
+    selectedOption.classList.add('active');
+  }
+}
+
+
+  // BUY button redirection with data transfer
+  document.querySelector(".buy-button").addEventListener("click", () => {
+    sessionStorage.setItem("productName", document.getElementById("productName").textContent);
+    sessionStorage.setItem("productPrice", document.getElementById("productPrice").textContent);
+    sessionStorage.setItem("productOffer", document.getElementById("productOffer").textContent);
+    sessionStorage.setItem("code", document.getElementById("code").textContent);
+
+    window.location.href = 'order-details.html';
+  });
     </script>
   </body>
 </html>
