@@ -26,7 +26,7 @@
       }
 
       .navbar {
-        background-color: #2874f0;
+        background-color: #212529;
         padding: 1rem 2rem;
       }
 
@@ -391,121 +391,80 @@
       display: inline-block;
       margin-top: 5px; /* Reduced margin to minimize extra space */
     }
+/* Main product container styling */
+.product-container-custom {
+  display: flex;
+  overflow-x: auto;
+  width: 100vw;
+  height: auto;
+  background-color: #f0f0f0;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+  margin: 0;
+  box-sizing: border-box;
+}
 
+/* Hide scrollbar in WebKit browsers */
+.product-container-custom::-webkit-scrollbar {
+  display: none;
+}
 
-    
-    .product-container-custom {
-    display: flex; /* Change to flex for single row */
-    overflow-x: auto; /* Enable horizontal scrolling */
-    width: 100vw;
-    height: 50vh; /* Reduced height to 50% of the viewport */
-    background-color: #f0f0f0;
-    margin-top: 50px; /* Add margin to prevent overlap with placeholder */
-    padding: 0; /* Remove padding */
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
-    scroll-behavior: smooth; /* Smooth scrolling */
+/* Product item styling */
+.product-item-custom {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px; /* Default width for larger screens */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  margin-right: 10px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.product-item-custom:hover {
+  transform: scale(1.05);
+}
+
+.product-image-custom {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px 5px 0 0;
+}
+
+.product-title-custom {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  margin: 5px 0 0;
+  line-height: 1.2;
+}
+
+/* Responsive styling for phone sizes */
+@media (max-width: 600px) {
+  .product-item-custom {
+    flex: 0 0 calc(50% - 10px); /* Two items per row on smaller screens */
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .product-item-custom {
+    flex: 0 0 50%; /* Adjust to ensure two items on even smaller screens */
+    margin-right: 5px;
+  }
 }
 
 
-    /* Product item styling */
-    .product-item-custom {
-      background-color: #ffffff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: auto; /* Allow dynamic height based on content */
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-      cursor: pointer;
-      margin-right: 5px; /* Reduced space between items */
-      flex: 0 0 calc(50% - 5px); /* Two items per row with smaller margin */
-      padding: 5px; /* Add padding to the product item */
-      box-sizing: border-box; /* Include padding and border in total height */
-    }
-
-    .product-item-custom:last-child {
-      margin-right: 0; /* Remove margin from last item */
-    }
-
-    .product-item-custom:hover {
-      transform: scale(1.05);
-    }
-
-    .product-image-custom {
-      width: 100%;
-      height: 150px;
-      object-fit: cover; /* Ensures the image covers the entire container */
-      margin-bottom: 0; /* Ensure no extra space below the image */
-    }
-
-    .product-title-custom,
-    .product-price-custom,
-    .product-offer-custom,
-    .product-delivery-custom,
-    .stock-alert-custom {
-      margin: 2px 0; /* Reduce margin for all text elements */
-    }
-
-    .product-title-custom {
-      font-size: 16px;
-      color: #333;
-      font-weight: bold;
-    }
-
-    .product-price-custom {
-      font-size: 18px;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .product-offer-custom {
-      font-size: 14px;
-      color: green;
-    }
-
-    .product-delivery-custom {
-      font-size: 14px;
-      color: #555;
-    }
-
-    .stock-alert-custom {
-      color: violet;
-      font-size: 14px;
-      background-color: #e6e6fa;
-      padding: 5px;
-      border-radius: 3px;
-      display: inline-block;
-    }
-
-    /* New styling for the text below the container */
-    .hello-buddy {
-      text-align: center; /* Center align the text */
-      font-size: 20px; /* Font size */
-      color: #333; /* Text color */
-      margin: 10px 0; /* Margin around the text */
-      position: absolute; /* Position the text below the container */
-      bottom: 10px; /* Position it 10px from the bottom */
-      left: 0;
-      right: 0; /* Stretch across the full width */
-    }
-
-    /* Responsive styles */
-    @media (min-width: 600px) {
-      .product-item-custom {
-        flex: 0 0 calc(33.33% - 5px); /* Adjust for larger screens */
-      }
-    }
-
-    @media (min-width: 900px) {
-      .product-item-custom {
-        flex: 0 0 calc(25% - 5px); /* Adjust for larger screens */
-      }
-    }
 
     .containermove {
-            background-color: yellow;
+            background-color: whitesmoke;
             padding: 20px;
             overflow: hidden;
             position: relative;
@@ -711,20 +670,7 @@
 
 
 <div class="product-container-custom">
-  <div
-    class="product-item-custom"
-    onclick="redirectToPage('Shoes', '₹1299', 'Image & logo/shoes1.jfif', ['Image & logo/shoes2.jfif', 'Image & logo/shoes3.jfif', 'Image & logo/shoes4.jfif'], '10% off', 'Oct 30 - Free','#21392')"
-  >
-    <img src="Image & logo/shoes1.jfif" alt="Product Image" class="product-image-custom" />
-    <div class="product-details-custom">
-      <p class="product-title-custom">Shoes</p>
-      <p class="product-price-custom">₹1299</p>
-      <p class="product-offer-custom">25% Off</p>
-      <span class="stock-alert-custom">Only a few left in stock!</span>
-      <p class="product-delivery-custom">Delivery Charge: ₹49</p>
-      <p class="product-code-custom">#3E10K</p>
-    </div>
-  </div>
+
 
   <div
     class="product-item-custom"
@@ -732,12 +678,8 @@
   >
     <img src="Image & logo/T shirt6.jfif" alt="Product Image" class="product-image-custom" />
     <div class="product-details-custom">
-      <p class="product-title-custom">Shoes</p>
-      <p class="product-price-custom">₹1299</p>
-      <p class="product-offer-custom">25% Off</p>
-      <span class="stock-alert-custom">Only a few left in stock!</span>
-      <p class="product-delivery-custom">Delivery Charge: ₹49</p>
-      <p class="product-code-custom">#3E10K</p>
+      <p class="product-title-custom">T shirt</p>
+  
     </div>
   </div>
   <div
@@ -746,12 +688,8 @@
 >
   <img src="Image & logo/T shirt4.jfif" alt="Product Image" class="product-image-custom" />
   <div class="product-details-custom">
-    <p class="product-title-custom">Shoes</p>
-    <p class="product-price-custom">₹1299</p>
-    <p class="product-offer-custom">25% Off</p>
-    <span class="stock-alert-custom">Only a few left in stock!</span>
-    <p class="product-delivery-custom">Delivery Charge: ₹49</p>
-    <p class="product-code-custom">#3E10K</p>
+    <p class="product-title-custom">T shirt</p>
+    
   </div>
 </div>
 <div
@@ -760,12 +698,8 @@ onclick="redirectToPage('Shoes', '₹1299', 'Image & logo/shoes1.jfif', ['Image 
 >
 <img src="Image & logo/T shirt2.jfif" alt="Product Image" class="product-image-custom" />
 <div class="product-details-custom">
-  <p class="product-title-custom">Shoes</p>
-  <p class="product-price-custom">₹1299</p>
-  <p class="product-offer-custom">25% Off</p>
-  <span class="stock-alert-custom">Only a few left in stock!</span>
-  <p class="product-delivery-custom">Delivery Charge: ₹49</p>
-  <p class="product-code-custom">#3E10K</p>
+  <p class="product-title-custom">T shirt</p>
+
 </div>
 </div>
 <div
@@ -774,12 +708,8 @@ onclick="redirectToPage('Shoes', '₹1299', 'Image & logo/shoes1.jfif', ['Image 
 >
 <img src="Image & logo/suit3.jfif" alt="Product Image" class="product-image-custom" />
 <div class="product-details-custom">
-  <p class="product-title-custom">Shoes</p>
-  <p class="product-price-custom">₹1299</p>
-  <p class="product-offer-custom">25% Off</p>
-  <span class="stock-alert-custom">Only a few left in stock!</span>
-  <p class="product-delivery-custom">Delivery Charge: ₹49</p>
-  <p class="product-code-custom">#3E10K</p>
+  <p class="product-title-custom">Suit</p>
+  
 </div>
 </div>
 
@@ -789,12 +719,8 @@ onclick="redirectToPage('Shoes', '₹1299', 'Image & logo/shoes1.jfif', ['Image 
   >
     <img src="Image & logo/hoodies2.jfif" alt="Product Image" class="product-image-custom" />
     <div class="product-details-custom">
-      <p class="product-title-custom">Shoes</p>
-      <p class="product-price-custom">₹1299</p>
-      <p class="product-offer-custom">25% Off</p>
-      <span class="stock-alert-custom">Only a few left in stock!</span>
-      <p class="product-delivery-custom">Delivery Charge: ₹49</p>
-      <p class="product-code-custom">#3E10K</p>
+      <p class="product-title-custom">Hoodie</p>
+      
     </div>
   </div>
 
@@ -804,12 +730,8 @@ onclick="redirectToPage('Shoes', '₹1299', 'Image & logo/shoes1.jfif', ['Image 
   >
     <img src="Image & logo/hoodies.jfif" alt="Product Image" class="product-image-custom" />
     <div class="product-details-custom">
-      <p class="product-title-custom">Shoes</p>
-      <p class="product-price-custom">₹1299</p>
-      <p class="product-offer-custom">25% Off</p>
-      <span class="stock-alert-custom">Only a few left in stock!</span>
-      <p class="product-delivery-custom">Delivery Charge: ₹49</p>
-      <p class="product-code-custom">#3E10K</p>
+      <p class="product-title-custom">Hoodie</p>
+
     </div>
   </div>
 </div>
